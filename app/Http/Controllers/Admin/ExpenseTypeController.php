@@ -1,0 +1,158 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\AccountsTree;
+use App\Models\CatchRecipt;
+use App\Models\Expenses;
+use App\Models\ExpenseType;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Alkoumi\LaravelArabicTafqeet\Tafqeet;
+
+class ExpenseTypeController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index($type)
+    {
+        $types = ExpenseType::all();
+        $accounts = AccountsTree::all(); 
+        return view('admin.Expenses.types' , compact('types' , 'accounts' , 'type'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        if($request -> id == 0){
+
+            $validated = $request->validate([
+                'name_ar' => 'required',
+                'name_en' => 'required',
+                'account_id' => 'required',
+                'type' => 'required'
+            ]);
+            try {
+                ExpenseType::create([
+                    'name_ar' => $request -> name_ar,
+                    'name_en' => $request -> name_en,
+                    'notes' => $request -> notes ?? '' ,
+                    'account_id' => $request -> account_id,
+                    'type' => $request -> type
+                ]);
+
+                return redirect()->route('expenses_type' , $request -> type)->with('success' , __('main.created'));
+            } catch(QueryException $ex){ 
+                return redirect()->route('expenses_type' , $request -> type)->with('error' ,  $ex->getMessage());
+            }
+        } else {
+            return  $this -> update($request);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\ExpenseType  $expenseType
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $type = ExpenseType::find($id);
+        echo json_encode($type);
+        exit();
+    }
+
+    public function print($id){
+        $bill = ExpenseType::find($id);
+        //$valAr = Tafqeet::inArabic($bill -> amount,'sar');
+        $valAr = '';
+        return view('admin.catchs.print' , compact('bill' , 'valAr'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\ExpenseType  $expenseType
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(ExpenseType $expenseType)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\ExpenseType  $expenseType
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        $category = ExpenseType::find($request -> id);
+        if($category){
+            $validated = $request->validate([
+                'name_ar' => 'required',
+                'name_en' => 'required',
+                'account_id' => 'required',
+                'type' => 'required'
+            ]);
+            try {
+                $category -> update([
+                    'name_ar' => $request -> name_ar,
+                    'name_en' => $request -> name_en,
+                    'notes' => $request -> notes ?? '' ,
+                    'account_id' => $request -> account_id,
+                    'type' => $request -> type
+                ]);
+                return redirect()->route('expenses_type' , $request -> type)->with('success' , __('main.updated'));
+            } catch (QueryException $ex){
+                return redirect()->route('expenses_type' , $request -> type)->with('error' ,  $ex->getMessage());
+            }
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\ExpenseType  $expenseType
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $category = ExpenseType::find($id);
+        if($category){
+            $expenses = Expenses::where('type_id' , '=' , $id) -> get();
+            $catshes = CatchRecipt::where('type_id' , '=' , $id) -> get();
+            if(count($expenses) == 0 && count($catshes) == 0){
+                $category -> delete();
+                return redirect()->route('expenses_type' , $category -> type)->with('success' , __('main.deleted'));
+            } else {
+                return redirect()->route('expenses_type' , $category -> type)->with('error' , __('main.can_not_delete_item'))  ;
+            }
+
+
+        }
+    }
+}
