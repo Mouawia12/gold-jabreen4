@@ -8,12 +8,14 @@
         $fontPath = str_replace('\\', '/', public_path('fonts/Tajawal-Regular.ttf'));
     @endphp
     <style>
+        @page { margin: 8mm 8mm 22mm 8mm; }
         @font-face {
             font-family: 'Tajawal';
             src: url("file:///{{ $fontPath }}") format('truetype');
             font-weight: normal;
             font-style: normal;
         }
+        html, body { height: 100%; }
         * { box-sizing: border-box; font-family: 'Tajawal'; }
         body {
             direction: rtl;
@@ -21,7 +23,7 @@
             font-size: 12px;
             color: #000;
             margin: 0;
-            padding: 8px;
+            padding: 0;
         }
         table, th, td { direction: rtl; }
         th, td { vertical-align: middle; }
@@ -32,23 +34,23 @@
         .small { font-size: 11px; }
         .title { font-size: 16px; font-weight: bold; margin: 4px 0; }
         .subtitle { font-size: 13px; font-weight: bold; margin: 2px 0; }
-        .hr { border-top: 2px solid #000; margin: 6px 0 8px; }
+        .hr { border-top: 1px solid #555; margin: 6px 0 8px; }
         table { width: 100%; border-collapse: collapse; }
         .header-table td { vertical-align: top; }
         .header-table .block { line-height: 1.6; }
         .header-table .logo img { max-width: 110px; max-height: 110px; }
-        .meta-table, .items-table, .summary-table, .weights-table, .payments-table { border: 1px solid #000; }
+        .meta-table, .items-table, .summary-table, .weights-table, .payments-table { border: 1px solid #999; }
         .meta-table th, .meta-table td,
         .items-table th, .items-table td,
         .summary-table th, .summary-table td,
         .weights-table th, .weights-table td,
         .payments-table th, .payments-table td {
-            border: 1px solid #000;
+            border: 1px solid #999;
             padding: 4px;
         }
-        .items-table th { background: #eee; }
+        .items-table th { background: #e0e0e0; }
         .qr-box {
-            border: 2px solid #000;
+            border: 1px solid #999;
             width: 150px;
             height: 150px;
             margin: 0 auto;
@@ -57,11 +59,25 @@
         .qr-box td { text-align: center; vertical-align: middle; }
         .qr-box img { max-width: 135px; max-height: 135px; }
         .section-gap { margin-top: 8px; }
-        .footer { border-top: 1px solid #000; margin-top: 8px; padding-top: 6px; }
+        .page { min-height: 100%; }
+        .page-content { padding-bottom: 26mm; }
+        .footer {
+            border-top: 1px solid #555;
+            padding: 6px 0 0;
+            position: fixed;
+            left: 8mm;
+            right: 8mm;
+            bottom: 8mm;
+            background: #fff;
+        }
         .ltr { direction: ltr; unicode-bidi: bidi-override; }
+        .meta-grid td { vertical-align: top; }
+        .meta-details-table td { padding: 2px 6px; }
     </style>
 </head>
 <body>
+<div class="page">
+<div class="page-content">
 @php
     $fmt = function ($value) {
         return number_format((float) $value, 2, '.', ',');
@@ -107,41 +123,29 @@
 
 <div class="hr"></div>
 
-<table class="meta-table">
+<table class="meta-grid">
     <tr>
-        <td style="width: 60%; vertical-align: top;">
-            <table class="meta-table" style="border: none;">
+        <td style="width: 70%; vertical-align: top;">
+            <table class="meta-details-table">
                 <tr>
-                    <th class="text-right">رقم الفاتورة</th>
-                    <td class="text-left ltr">{{ $invoice['invoice_no'] }}</td>
+                    <td class="text-right">التاريخ: <span class="ltr">{{ $invoice['date'] }}</span></td>
+                    <td class="text-right">الرقم: <span class="ltr">{{ $invoice['invoice_no'] }}</span></td>
                 </tr>
                 <tr>
-                    <th class="text-right">التاريخ</th>
-                    <td class="text-left ltr">{{ $invoice['date'] }}</td>
+                    <td class="text-right">الوقت: <span class="ltr">{{ $invoice['time'] }}</span></td>
+                    <td class="text-right">النوع: {{ $invoice['type'] }}</td>
                 </tr>
                 <tr>
-                    <th class="text-right">الوقت</th>
-                    <td class="text-left ltr">{{ $invoice['time'] }}</td>
+                    <td class="text-right">العميل: {{ $invoice['customer_name'] ?: '-' }}</td>
+                    <td class="text-right">التليفون: <span class="ltr">{{ $invoice['customer_phone'] ?: '-' }}</span></td>
                 </tr>
                 <tr>
-                    <th class="text-right">النوع</th>
-                    <td class="text-left">{{ $invoice['type'] }}</td>
-                </tr>
-                <tr>
-                    <th class="text-right">التليفون</th>
-                    <td class="text-left ltr">{{ $invoice['customer_phone'] ?: '-' }}</td>
-                </tr>
-                <tr>
-                    <th class="text-right">العميل</th>
-                    <td class="text-left">{{ $invoice['customer_name'] ?: '-' }}</td>
-                </tr>
-                <tr>
-                    <th class="text-right">أمر البيع</th>
-                    <td class="text-left ltr">{{ $invoice['sale_order_ref'] }}</td>
+                    <td class="text-right">أمر البيع: <span class="ltr">{{ $invoice['sale_order_ref'] }}</span></td>
+                    <td class="text-right">&nbsp;</td>
                 </tr>
             </table>
         </td>
-        <td style="width: 40%; vertical-align: top;">
+        <td style="width: 30%; vertical-align: top;">
             <div class="qr-box">
                 <table>
                     <tr>
@@ -264,6 +268,7 @@
 
 <div class="text-right">البائع: {{ $seller['seller_name'] }}</div>
 
+</div>
 <div class="footer">
     <table>
         <tr>
@@ -271,6 +276,7 @@
             <td class="text-left ltr">{{ $footer['footer_en'] }}</td>
         </tr>
     </table>
+</div>
 </div>
 </body>
 </html>
