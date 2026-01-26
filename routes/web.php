@@ -38,6 +38,7 @@ use App\Http\Controllers\Admin\ExitOldController;
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\ItemCollectibleController;
 use App\Http\Controllers\Admin\PurchaseCollectibleController;
+use App\Http\Controllers\Admin\SimplifiedTaxInvoicePrintController;
 use App\Http\Controllers\Admin\SaleCollectibleController; 
 use App\Http\Controllers\Admin\AccountingClosingController;
 use App\Http\Controllers\Admin\ZataControlle;
@@ -101,6 +102,8 @@ Route::group(
     Route::post('admin/logout', [LoginController::class, 'logout' ] )->name('admin.logout'); 
 
     Route::get('simplified-tax-invoice', [ZataControlle::class, 'Simplified_Tax_Invoice' ] )->name('admin.zata.simplified.invoice');
+    Route::get('/sales/simplified-tax/{invoice}/print', [SimplifiedTaxInvoicePrintController::class, 'print'])
+        ->name('admin.sales.simplified_tax.print');
     
     
     // admins Routes
@@ -609,5 +612,3 @@ Route::group(
     Route::get('/fix-old-journal', [TestController::class, 'fixOldJournal']);
 });
 });
-
-

@@ -79,6 +79,9 @@ class PosController extends WarehouseController
                          $btn = '<a href='.route('workExitPreview',$row->id).' class="btn btn-primary" 
                                     value="'.$row->id.'" role="button" data-bs-toggle="button" target="_blank" >
                                     <i class="fa fa-eye"></i>معاينة</a>';
+                         $btn = $btn.'<a href='.route('admin.sales.simplified_tax.print',$row->id).' class="btn btn-warning" 
+                                    value="'.$row->id.'" role="button" data-bs-toggle="button" target="_blank" >
+                                    <i class="fa fa-print"></i>طباعة</a>';
                         }
                         if($row -> returned_bill_id == 0 && $row -> net_money > 0){
                             if(auth()->user()->can(['اضافة مرتجع فاتورة مبيعات','عرض مرتجع فاتورة مبيعات'])){     
