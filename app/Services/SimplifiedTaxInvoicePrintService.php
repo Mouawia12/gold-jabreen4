@@ -214,6 +214,7 @@ class SimplifiedTaxInvoicePrintService
 
         $normalized = trim($logo, '/');
         $candidates = [
+            public_path('uploads/CompanyInfo/' . $normalized),
             public_path($normalized),
             public_path('storage/' . $normalized),
             storage_path('app/public/' . $normalized),
