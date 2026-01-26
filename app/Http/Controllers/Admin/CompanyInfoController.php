@@ -128,7 +128,7 @@ class CompanyInfoController extends Controller
                 $imageName = time().'.'.$request->image_url->extension();
                 $request->image_url->move(('uploads/CompanyInfo/'), $imageName);
             } else {
-                $imageName = $info ->  image_url;
+                $imageName = $info -> logo;
             }
             $info -> update ([
                 'name_ar' => $request -> name_ar,

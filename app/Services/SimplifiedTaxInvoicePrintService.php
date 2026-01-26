@@ -212,9 +212,27 @@ class SimplifiedTaxInvoicePrintService
             return $defaultLogo;
         }
 
-        $normalized = trim($logo, '/');
+        $original = trim($logo);
+        $original = trim($original, "\"'");
+        if (
+            !str_starts_with($original, 'http://')
+            && !str_starts_with($original, 'https://')
+            && file_exists($original)
+        ) {
+            return $original;
+        }
+
+        $normalized = $original;
+        $normalized = str_replace('\\', '/', $normalized);
+        $normalized = trim($normalized, '/');
         if (str_starts_with($normalized, 'http://') || str_starts_with($normalized, 'https://')) {
             $normalized = ltrim(parse_url($normalized, PHP_URL_PATH) ?? '', '/');
+        }
+        if (
+            (preg_match('/^[A-Za-z]:\\//', $normalized) || str_starts_with($normalized, '/'))
+            && file_exists($normalized)
+        ) {
+            return $normalized;
         }
 
         $basename = basename($normalized);
@@ -223,6 +241,12 @@ class SimplifiedTaxInvoicePrintService
             public_path('uploads/CompanyInfo/' . $basename),
             public_path($normalized),
             public_path($basename),
+            base_path('uploads/CompanyInfo/' . $normalized),
+            base_path('uploads/CompanyInfo/' . $basename),
+            base_path('uploads/' . $normalized),
+            base_path('uploads/' . $basename),
+            base_path($normalized),
+            base_path($basename),
             public_path('storage/' . $normalized),
             public_path('storage/' . $basename),
             storage_path('app/public/' . $normalized),
