@@ -212,9 +212,18 @@ class SimplifiedTaxInvoicePrintService
             return $defaultLogo;
         }
 
-        $logoPath = public_path(trim($logo, '/'));
-        if (file_exists($logoPath)) {
-            return $logoPath;
+        $normalized = trim($logo, '/');
+        $candidates = [
+            public_path($normalized),
+            public_path('storage/' . $normalized),
+            storage_path('app/public/' . $normalized),
+            public_path('uploads/' . $normalized),
+        ];
+
+        foreach ($candidates as $path) {
+            if (file_exists($path)) {
+                return $path;
+            }
         }
 
         return $defaultLogo;
