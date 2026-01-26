@@ -213,12 +213,22 @@ class SimplifiedTaxInvoicePrintService
         }
 
         $normalized = trim($logo, '/');
+        if (str_starts_with($normalized, 'http://') || str_starts_with($normalized, 'https://')) {
+            $normalized = ltrim(parse_url($normalized, PHP_URL_PATH) ?? '', '/');
+        }
+
+        $basename = basename($normalized);
         $candidates = [
             public_path('uploads/CompanyInfo/' . $normalized),
+            public_path('uploads/CompanyInfo/' . $basename),
             public_path($normalized),
+            public_path($basename),
             public_path('storage/' . $normalized),
+            public_path('storage/' . $basename),
             storage_path('app/public/' . $normalized),
+            storage_path('app/public/' . $basename),
             public_path('uploads/' . $normalized),
+            public_path('uploads/' . $basename),
         ];
 
         foreach ($candidates as $path) {
