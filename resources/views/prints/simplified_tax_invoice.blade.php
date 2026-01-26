@@ -4,10 +4,13 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>فاتورة ضريبية مبسطة</title>
+    @php
+        $fontPath = str_replace('\\', '/', public_path('fonts/Tajawal-Regular.ttf'));
+    @endphp
     <style>
         @font-face {
             font-family: 'Tajawal';
-            src: url("file://{{ public_path('fonts/Tajawal-Regular.ttf') }}") format('truetype');
+            src: url("file:///{{ $fontPath }}") format('truetype');
             font-weight: normal;
             font-style: normal;
         }
@@ -81,7 +84,8 @@
         <td class="text-center" style="width: 34%;">
             <div class="logo">
                 @if($company['logo_path'])
-                    <img src="file://{{ $company['logo_path'] }}" alt="Logo">
+                    @php $logoPath = str_replace('\\', '/', $company['logo_path']); @endphp
+                    <img src="file:///{{ $logoPath }}" alt="Logo">
                 @endif
             </div>
             <div class="title">فاتورة ضريبية مبسطة</div>
