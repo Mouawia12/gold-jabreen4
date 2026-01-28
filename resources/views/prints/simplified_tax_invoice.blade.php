@@ -50,15 +50,15 @@
         }
         .items-table th { background: #e0e0e0; }
         .qr-box {
-            border: 1px solid #999;
-            width: 150px;
-            height: 150px;
+            width: 200px;
+            height: 200px;
             margin: 0 auto;
         }
         .qr-box table { width: 100%; height: 100%; }
         .qr-box td { text-align: center; vertical-align: middle; }
-        .qr-box img { max-width: 135px; max-height: 135px; }
+        .qr-box img { max-width: 195px; max-height: 195px; }
         .section-gap { margin-top: 8px; }
+        .section-gap-sm { margin-top: 2px; }
         .page { min-height: 100%; }
         .page-content { padding-bottom: 26mm; }
         .footer {
@@ -71,8 +71,10 @@
             background: #fff;
         }
         .ltr { direction: ltr; unicode-bidi: bidi-override; }
-        .meta-grid td { vertical-align: top; }
-        .meta-details-table td { padding: 2px 6px; }
+        .meta-grid { margin-top: 8px; }
+        .meta-grid td { vertical-align: middle; }
+        .meta-details-table { margin: 6px auto 0; }
+        .meta-details-table td { padding: 3px 6px; text-align: center; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -125,23 +127,23 @@
 
 <table class="meta-grid">
     <tr>
-        <td style="width: 70%; vertical-align: top;">
+        <td style="width: 70%; vertical-align: top; padding-top: 10px;">
             <table class="meta-details-table">
                 <tr>
-                    <td class="text-right">التاريخ: <span class="ltr">{{ $invoice['date'] }}</span></td>
-                    <td class="text-right">الرقم: <span class="ltr">{{ $invoice['invoice_no'] }}</span></td>
+                    <td>التاريخ: <span class="ltr">{{ $invoice['date'] }}</span></td>
+                    <td>الرقم: <span class="ltr">{{ $invoice['invoice_no'] }}</span></td>
                 </tr>
                 <tr>
-                    <td class="text-right">الوقت: <span class="ltr">{{ $invoice['time'] }}</span></td>
-                    <td class="text-right">النوع: {{ $invoice['type'] }}</td>
+                    <td>الوقت: <span class="ltr">{{ $invoice['time'] }}</span></td>
+                    <td>النوع: {{ $invoice['type'] }}</td>
                 </tr>
                 <tr>
-                    <td class="text-right">العميل: {{ $invoice['customer_name'] ?: '-' }}</td>
-                    <td class="text-right">التليفون: <span class="ltr">{{ $invoice['customer_phone'] ?: '-' }}</span></td>
+                    <td>العميل: {{ $invoice['customer_name'] ?: '-' }}</td>
+                    <td>التليفون: <span class="ltr">{{ $invoice['customer_phone'] ?: '-' }}</span></td>
                 </tr>
                 <tr>
-                    <td class="text-right">أمر البيع: <span class="ltr">{{ $invoice['sale_order_ref'] }}</span></td>
-                    <td class="text-right">&nbsp;</td>
+                    <td>أمر البيع: <span class="ltr">{{ $invoice['sale_order_ref'] }}</span></td>
+                    <td>&nbsp;</td>
                 </tr>
             </table>
         </td>
@@ -161,7 +163,7 @@
     </tr>
 </table>
 
-<div class="section-gap"></div>
+<div class="section-gap-sm"></div>
 
 <table class="items-table">
     <thead>
