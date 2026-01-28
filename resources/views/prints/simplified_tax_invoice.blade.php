@@ -203,6 +203,21 @@
 <table>
     <tr>
         <td style="width: 50%; vertical-align: top;">
+            <table class="payments-table">
+                <tr>
+                    <th colspan="2" class="text-center">طرق الدفع</th>
+                </tr>
+                <tr>
+                    <th>نقدي</th>
+                    <td class="text-left ltr">{{ $fmt($payments['cash_amount']) }} {{ $invoice['currency'] }}</td>
+                </tr>
+                <tr>
+                    <th>شبكة</th>
+                    <td class="text-left ltr">{{ $fmt($payments['card_amount']) }} {{ $invoice['currency'] }}</td>
+                </tr>
+            </table>
+        </td>
+        <td style="width: 50%; vertical-align: top;">
             <table class="summary-table">
                 <tr>
                     <th>صافي الفاتورة قبل الخصم</th>
@@ -223,41 +238,6 @@
                 <tr>
                     <th>الصافي شامل الضريبة</th>
                     <td class="text-left ltr">{{ $fmt($summary['grand_total']) }} {{ $invoice['currency'] }}</td>
-                </tr>
-            </table>
-        </td>
-        <td style="width: 50%; vertical-align: top;">
-            <table class="weights-table">
-                <tr>
-                    <th colspan="4" class="text-center">الأوزان حسب العيار</th>
-                </tr>
-                <tr>
-                    <th>24</th>
-                    <th>22</th>
-                    <th>21</th>
-                    <th>18</th>
-                </tr>
-                <tr>
-                    <td class="text-center">{{ $fmt($karat_totals['karat_24_weight']) }}</td>
-                    <td class="text-center">{{ $fmt($karat_totals['karat_22_weight']) }}</td>
-                    <td class="text-center">{{ $fmt($karat_totals['karat_21_weight']) }}</td>
-                    <td class="text-center">{{ $fmt($karat_totals['karat_18_weight']) }}</td>
-                </tr>
-            </table>
-
-            <div class="section-gap"></div>
-
-            <table class="payments-table">
-                <tr>
-                    <th colspan="2" class="text-center">طرق الدفع</th>
-                </tr>
-                <tr>
-                    <th>نقدي</th>
-                    <td class="text-left ltr">{{ $fmt($payments['cash_amount']) }} {{ $invoice['currency'] }}</td>
-                </tr>
-                <tr>
-                    <th>شبكة</th>
-                    <td class="text-left ltr">{{ $fmt($payments['card_amount']) }} {{ $invoice['currency'] }}</td>
                 </tr>
             </table>
         </td>
