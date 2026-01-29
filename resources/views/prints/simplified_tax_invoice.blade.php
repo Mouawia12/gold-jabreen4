@@ -166,6 +166,19 @@
 <div class="section-gap-sm"></div>
 
 <table class="items-table">
+    <colgroup>
+        <col style="width: 5%;">
+        <col style="width: 18%;">
+        <col style="width: 7%;">
+        <col style="width: 7%;">
+        <col style="width: 7%;">
+        <col style="width: 8%;">
+        <col style="width: 6%;">
+        <col style="width: 10%;">
+        <col style="width: 7%;">
+        <col style="width: 7%;">
+        <col style="width: 8%;">
+    </colgroup>
     <thead>
         <tr>
             <th>مسلسل</th>
