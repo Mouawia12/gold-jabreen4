@@ -76,7 +76,7 @@ class PosController extends WarehouseController
                 ->addColumn('action', function($row){ 
                     if($row -> type == 1){
                         if(auth()->user()->can('عرض فاتورة ضريبية')){  
-                         $btn = '<a href='.route('workExitPreview',$row->id).' class="btn btn-primary" 
+                         $btn = '<a href='.route('admin.sales.simplified_tax.print',$row->id).' class="btn btn-primary" 
                                     value="'.$row->id.'" role="button" data-bs-toggle="button" target="_blank" >
                                     <i class="fa fa-eye"></i>معاينة</a>';
                          $btn = $btn.'<a href='.route('admin.sales.simplified_tax.print',$row->id).' class="btn btn-warning" 
