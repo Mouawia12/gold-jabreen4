@@ -8,8 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
+        $currentSqlMode = DB::selectOne('SELECT @@SESSION.sql_mode AS sql_mode');
+        DB::statement("SET SESSION sql_mode='NO_ENGINE_SUBSTITUTION'");
+
         DB::unprepared(<<<'SQL'
-CREATE TABLE `catch_gold_recipts` (
+CREATE TABLE IF NOT EXISTS `catch_gold_recipts` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `branch_id` int(11) NOT NULL DEFAULT 1,
   `docNumber` varchar(50) NOT NULL,
@@ -27,7 +30,7 @@ CREATE TABLE `catch_gold_recipts` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `catch_gold_recipts_details` (
+CREATE TABLE IF NOT EXISTS `catch_gold_recipts_details` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `bill_id` int(11) NOT NULL,
   `karat_id` int(11) NOT NULL,
@@ -38,13 +41,13 @@ CREATE TABLE `catch_gold_recipts_details` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `catch_types` (
+CREATE TABLE IF NOT EXISTS `catch_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `company_movements` (
+CREATE TABLE IF NOT EXISTS `company_movements` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `branch_id` int(11) NOT NULL DEFAULT 1,
   `company_id` int(11) NOT NULL,
@@ -63,7 +66,7 @@ CREATE TABLE `company_movements` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `enter_money` (
+CREATE TABLE IF NOT EXISTS `enter_money` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `branch_id` int(11) NOT NULL DEFAULT 1,
   `doc_number` varchar(191) NOT NULL,
@@ -79,7 +82,7 @@ CREATE TABLE `enter_money` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `enter_olds` (
+CREATE TABLE IF NOT EXISTS `enter_olds` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `branch_id` int(11) NOT NULL DEFAULT 1,
   `bill_number` varchar(191) NOT NULL,
@@ -104,7 +107,7 @@ CREATE TABLE `enter_olds` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `enter_old_details` (
+CREATE TABLE IF NOT EXISTS `enter_old_details` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `bill_id` int(11) NOT NULL,
   `karat_id` int(11) NOT NULL,
@@ -119,7 +122,7 @@ CREATE TABLE `enter_old_details` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `enter_works` (
+CREATE TABLE IF NOT EXISTS `enter_works` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `branch_id` int(11) NOT NULL DEFAULT 1,
   `bill_number` varchar(191) NOT NULL,
@@ -145,7 +148,7 @@ CREATE TABLE `enter_works` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `enter_work_details` (
+CREATE TABLE IF NOT EXISTS `enter_work_details` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `bill_id` int(11) NOT NULL,
   `karat_id` int(11) NOT NULL,
@@ -162,7 +165,7 @@ CREATE TABLE `enter_work_details` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `exchange_rates` (
+CREATE TABLE IF NOT EXISTS `exchange_rates` (
   `id` int(11) NOT NULL,
   `conversion_rates` double(10,2) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -170,7 +173,7 @@ CREATE TABLE `exchange_rates` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
-CREATE TABLE `exit_money` (
+CREATE TABLE IF NOT EXISTS `exit_money` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `branch_id` int(11) NOT NULL DEFAULT 1,
   `doc_number` varchar(191) NOT NULL,
@@ -188,7 +191,7 @@ CREATE TABLE `exit_money` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `exit_olds` (
+CREATE TABLE IF NOT EXISTS `exit_olds` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `uuid` varchar(50) NOT NULL,
   `branch_id` int(11) NOT NULL DEFAULT 1,
@@ -214,7 +217,7 @@ CREATE TABLE `exit_olds` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `exit_olds_tax` (
+CREATE TABLE IF NOT EXISTS `exit_olds_tax` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `uuid` varchar(50) NOT NULL,
   `branch_id` int(11) NOT NULL DEFAULT 1,
@@ -241,7 +244,7 @@ CREATE TABLE `exit_olds_tax` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `exit_old_details` (
+CREATE TABLE IF NOT EXISTS `exit_old_details` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `bill_id` int(11) NOT NULL,
   `karat_id` int(11) NOT NULL,
@@ -258,7 +261,7 @@ CREATE TABLE `exit_old_details` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `exit_old_tax_details` (
+CREATE TABLE IF NOT EXISTS `exit_old_tax_details` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `bill_id` int(11) NOT NULL,
   `karat_id` int(11) NOT NULL,
@@ -275,7 +278,7 @@ CREATE TABLE `exit_old_tax_details` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `exit_works` (
+CREATE TABLE IF NOT EXISTS `exit_works` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `uuid` varchar(50) NOT NULL,
   `branch_id` int(11) DEFAULT 1,
@@ -304,7 +307,7 @@ CREATE TABLE `exit_works` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `exit_works_tax` (
+CREATE TABLE IF NOT EXISTS `exit_works_tax` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `uuid` varchar(50) NOT NULL,
   `branch_id` int(11) NOT NULL DEFAULT 1,
@@ -334,7 +337,7 @@ CREATE TABLE `exit_works_tax` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `exit_work_details` (
+CREATE TABLE IF NOT EXISTS `exit_work_details` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `bill_id` int(11) NOT NULL,
   `item_id` int(11) NOT NULL,
@@ -350,7 +353,7 @@ CREATE TABLE `exit_work_details` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `exit_work_tax_details` (
+CREATE TABLE IF NOT EXISTS `exit_work_tax_details` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `bill_id` int(11) NOT NULL,
   `item_id` int(11) NOT NULL,
@@ -365,7 +368,7 @@ CREATE TABLE `exit_work_tax_details` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `expense_types` (
+CREATE TABLE IF NOT EXISTS `expense_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name_ar` varchar(191) NOT NULL,
   `name_en` varchar(191) NOT NULL,
@@ -376,7 +379,7 @@ CREATE TABLE `expense_types` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `gold_converts` (
+CREATE TABLE IF NOT EXISTS `gold_converts` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `date` date NOT NULL,
   `doc_number` varchar(191) NOT NULL,
@@ -387,7 +390,7 @@ CREATE TABLE `gold_converts` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `gold_convert_items` (
+CREATE TABLE IF NOT EXISTS `gold_convert_items` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `docId` int(11) NOT NULL,
   `item_id` int(11) NOT NULL,
@@ -398,13 +401,13 @@ CREATE TABLE `gold_convert_items` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `infos` (
+CREATE TABLE IF NOT EXISTS `infos` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `isroles` (
+CREATE TABLE IF NOT EXISTS `isroles` (
   `id` int(11) NOT NULL,
   `name_ar` varchar(100) NOT NULL,
   `name_en` varchar(100) NOT NULL,
@@ -413,7 +416,7 @@ CREATE TABLE `isroles` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-CREATE TABLE `items` (
+CREATE TABLE IF NOT EXISTS `items` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `code` varchar(191) NOT NULL,
   `name_ar` varchar(191) NOT NULL,
@@ -440,7 +443,7 @@ CREATE TABLE `items` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `items_collectibles` (
+CREATE TABLE IF NOT EXISTS `items_collectibles` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `code` varchar(191) NOT NULL,
   `name_ar` varchar(191) NOT NULL,
@@ -474,7 +477,7 @@ CREATE TABLE `items_collectibles` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `item_materials` (
+CREATE TABLE IF NOT EXISTS `item_materials` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `parent_id` int(11) NOT NULL,
   `item_id` int(11) NOT NULL,
@@ -482,7 +485,7 @@ CREATE TABLE `item_materials` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `karats` (
+CREATE TABLE IF NOT EXISTS `karats` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name_ar` varchar(255) NOT NULL,
   `name_en` varchar(255) NOT NULL,
@@ -493,25 +496,25 @@ CREATE TABLE `karats` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `migrations` (
+CREATE TABLE IF NOT EXISTS `migrations` (
   `id` int(10) UNSIGNED NOT NULL,
   `migration` varchar(191) NOT NULL,
   `batch` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `model_has_permissions` (
+CREATE TABLE IF NOT EXISTS `model_has_permissions` (
   `permission_id` bigint(20) UNSIGNED NOT NULL,
   `model_type` varchar(255) NOT NULL,
   `model_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-CREATE TABLE `model_has_roles` (
+CREATE TABLE IF NOT EXISTS `model_has_roles` (
   `role_id` bigint(20) UNSIGNED NOT NULL,
   `model_type` varchar(255) NOT NULL,
   `model_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-CREATE TABLE `notification_wahtsapp` (
+CREATE TABLE IF NOT EXISTS `notification_wahtsapp` (
   `id` int(11) NOT NULL,
   `bill_number` varchar(50) NOT NULL,
   `client_phone` varchar(50) NOT NULL,
@@ -521,7 +524,7 @@ CREATE TABLE `notification_wahtsapp` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
-CREATE TABLE `permissions` (
+CREATE TABLE IF NOT EXISTS `permissions` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
   `key` varchar(255) NOT NULL,
@@ -530,7 +533,7 @@ CREATE TABLE `permissions` (
   `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-CREATE TABLE `program_settings` (
+CREATE TABLE IF NOT EXISTS `program_settings` (
   `id` int(11) NOT NULL,
   `branche` int(11) NOT NULL,
   `users` int(11) NOT NULL,
@@ -540,7 +543,7 @@ CREATE TABLE `program_settings` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `purchases_collectibles` (
+CREATE TABLE IF NOT EXISTS `purchases_collectibles` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `branch_id` int(11) NOT NULL DEFAULT 1,
   `bill_number` varchar(50) NOT NULL,
@@ -562,7 +565,7 @@ CREATE TABLE `purchases_collectibles` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `purchase_collectible_details` (
+CREATE TABLE IF NOT EXISTS `purchase_collectible_details` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `bill_id` int(11) NOT NULL,
   `karat_id` int(11) NOT NULL,
@@ -575,13 +578,13 @@ CREATE TABLE `purchase_collectible_details` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `return_works` (
+CREATE TABLE IF NOT EXISTS `return_works` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `roles` (
+CREATE TABLE IF NOT EXISTS `roles` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
   `guard_name` varchar(255) NOT NULL,
@@ -589,12 +592,12 @@ CREATE TABLE `roles` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-CREATE TABLE `role_has_permissions` (
+CREATE TABLE IF NOT EXISTS `role_has_permissions` (
   `permission_id` bigint(20) UNSIGNED NOT NULL,
   `role_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-CREATE TABLE `role_views` (
+CREATE TABLE IF NOT EXISTS `role_views` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `role_id` int(11) NOT NULL,
   `view_id` int(11) NOT NULL,
@@ -607,7 +610,7 @@ CREATE TABLE `role_views` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `sale_collectibles` (
+CREATE TABLE IF NOT EXISTS `sale_collectibles` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `branch_id` int(11) NOT NULL DEFAULT 1,
   `bill_number` varchar(191) NOT NULL,
@@ -631,7 +634,7 @@ CREATE TABLE `sale_collectibles` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `sale_collectibles_details` (
+CREATE TABLE IF NOT EXISTS `sale_collectibles_details` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `bill_id` int(11) NOT NULL,
   `karat_id` int(11) NOT NULL,
@@ -646,7 +649,7 @@ CREATE TABLE `sale_collectibles_details` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `simplified_debit` (
+CREATE TABLE IF NOT EXISTS `simplified_debit` (
   `id` int(11) NOT NULL,
   `uuid` varchar(50) NOT NULL,
   `serial_number` varchar(50) NOT NULL,
@@ -672,7 +675,7 @@ CREATE TABLE `simplified_debit` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
-CREATE TABLE `simplified_debit_details` (
+CREATE TABLE IF NOT EXISTS `simplified_debit_details` (
   `id` int(11) NOT NULL,
   `bill_id` int(11) NOT NULL,
   `simplified_detail_id` int(11) NOT NULL,
@@ -687,7 +690,7 @@ CREATE TABLE `simplified_debit_details` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
-CREATE TABLE `standard_debit` (
+CREATE TABLE IF NOT EXISTS `standard_debit` (
   `id` int(11) NOT NULL,
   `uuid` varchar(50) NOT NULL,
   `serial_number` varchar(50) NOT NULL,
@@ -713,7 +716,7 @@ CREATE TABLE `standard_debit` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
-CREATE TABLE `standard_debit_details` (
+CREATE TABLE IF NOT EXISTS `standard_debit_details` (
   `id` int(11) NOT NULL,
   `bill_id` int(11) NOT NULL,
   `standard_detail_id` int(11) NOT NULL,
@@ -728,7 +731,7 @@ CREATE TABLE `standard_debit_details` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
-CREATE TABLE `storehouses` (
+CREATE TABLE IF NOT EXISTS `storehouses` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `branch_id` int(11) NOT NULL DEFAULT 1,
   `code` varchar(191) NOT NULL,
@@ -743,13 +746,13 @@ CREATE TABLE `storehouses` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `sync_states` (
+CREATE TABLE IF NOT EXISTS `sync_states` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `tax_settings` (
+CREATE TABLE IF NOT EXISTS `tax_settings` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `enabled` int(11) NOT NULL,
   `value` decimal(8,2) NOT NULL,
@@ -757,7 +760,7 @@ CREATE TABLE `tax_settings` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `tbl_stone_type` (
+CREATE TABLE IF NOT EXISTS `tbl_stone_type` (
   `id` int(11) NOT NULL,
   `stone_ar` varchar(150) NOT NULL,
   `stone_en` varchar(150) NOT NULL,
@@ -766,13 +769,13 @@ CREATE TABLE `tbl_stone_type` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `user_roles` (
+CREATE TABLE IF NOT EXISTS `user_roles` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `views` (
+CREATE TABLE IF NOT EXISTS `views` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name_ar` varchar(191) NOT NULL,
   `name_en` varchar(191) NOT NULL,
@@ -781,7 +784,7 @@ CREATE TABLE `views` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `warehouses_items` (
+CREATE TABLE IF NOT EXISTS `warehouses_items` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `branch_id` int(11) NOT NULL DEFAULT 1,
   `type` int(11) NOT NULL,
@@ -796,6 +799,10 @@ CREATE TABLE `warehouses_items` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SQL
         );
+
+        if ($currentSqlMode && isset($currentSqlMode->sql_mode)) {
+            DB::statement("SET SESSION sql_mode='" . $currentSqlMode->sql_mode . "'");
+        }
     }
 
     public function down(): void
