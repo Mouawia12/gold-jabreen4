@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Branch;
+use App\Models\Karat;
+use App\Models\Karat2;
 use App\Models\Pricing;
 use App\Models\TaxSettings;
 use App\Models\User;
@@ -16,6 +18,7 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\QueryException;
 
 class DatabaseSeeder extends Seeder
 {
@@ -114,8 +117,65 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        $this->seedKarats();
         $this->seedPermissions();
         $this->grantAdminAllPermissions();
+    }
+
+    private function seedKarats(): void
+    {
+        if (!Schema::hasTable('karats')) {
+            return;
+        }
+
+        $karats = [
+            [
+                'name_ar' => 'عيار 18',
+                'name_en' => 'Karat 18',
+                'label' => 'K18',
+                'stamp_value' => 15.00,
+                'transform_factor' => 0.8571,
+            ],
+            [
+                'name_ar' => 'عيار 21',
+                'name_en' => 'Karat 21',
+                'label' => 'K21',
+                'stamp_value' => 15.00,
+                'transform_factor' => 1.0000,
+            ],
+            [
+                'name_ar' => 'عيار 22',
+                'name_en' => 'Karat 22',
+                'label' => 'K22',
+                'stamp_value' => 15.00,
+                'transform_factor' => 1.0470,
+            ],
+            [
+                'name_ar' => 'عيار 24',
+                'name_en' => 'Karat 24',
+                'label' => 'K24',
+                'stamp_value' => 0.00,
+                'transform_factor' => 1.1428,
+            ],
+        ];
+
+        foreach ($karats as $karat) {
+            Karat::updateOrCreate(
+                ['label' => $karat['label']],
+                $karat
+            );
+        }
+
+        try {
+            foreach ($karats as $karat) {
+                Karat2::updateOrCreate(
+                    ['label' => $karat['label']],
+                    $karat
+                );
+            }
+        } catch (QueryException $ex) {
+            // Ignore mysql2 sync failures to avoid blocking primary seed.
+        }
     }
 
     private function seedPermissions(): void

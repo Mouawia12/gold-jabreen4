@@ -24,9 +24,9 @@ class KaratSimplePageTest extends TestCase
 
         $payload = [
             'id' => 0,
-            'name_ar' => 'عيار 18',
-            'name_en' => 'K18',
-            'label' => '18',
+            'name_ar' => 'عيار اختبار ' . now()->timestamp,
+            'name_en' => 'KTest' . now()->timestamp,
+            'label' => 'KT' . now()->timestamp,
             'stamp_value' => 18,
             'transform_factor' => 0.8571,
         ];
@@ -34,9 +34,9 @@ class KaratSimplePageTest extends TestCase
         $post = $this->post('/admin/storeKarat', $payload);
         $post->assertStatus(302);
         $this->assertDatabaseHas('karats', [
-            'name_ar' => 'عيار 18',
-            'name_en' => 'K18',
-            'label' => '18',
+            'label' => $payload['label'],
+            'name_ar' => $payload['name_ar'],
+            'name_en' => $payload['name_en'],
         ]);
     }
 }
