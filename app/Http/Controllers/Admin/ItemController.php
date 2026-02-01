@@ -203,29 +203,32 @@ class ItemController extends Controller
                     'supplier_bill_number' =>$request->supplier_bill_number ?? 0,
                     'user_id' => Auth::user() -> id
                 ]); 
-
-                Item2::create([
-                    'code' => $request->code,
-                    'name_ar' => $request->name_ar,
-                    'name_en' => $request->name_en != null ? $request->name_en : ' ',
-                    'branch_id' => $request->branch_id,
-                    'category_id' => $request->category_id,
-                    'karat_id' => $request->karat_id ?? 0,
-                    'weight' => $request->weight ?? 0,
-                    'no_metal' => $request->no_metal ?? 0,
-                    'no_metal_type' => $request->no_metal_type ?? 0,
-                    'made_Value' => $request->made_Value ?? 0,
-                    'item_type' => $request->item_type ?? 1,
-                    'tax' => $tax ?? 0,
-                    'state' => $request->state ?? -1,
-                    'img' => $imageName ?? ' ',
-                    'price' => $request->price ?? 0,
-                    'cost' => $request->cost ?? 0,
-                    'multi' => $request->multi ?? 0,
-                    'supplier_id' =>$request->supplier_id ?? 0,
-                    'supplier_bill_number' =>$request->supplier_bill_number ?? 0,
-                    'user_id' => Auth::user() -> id
-                ]); 
+                try {
+                    Item2::create([
+                        'code' => $request->code,
+                        'name_ar' => $request->name_ar,
+                        'name_en' => $request->name_en != null ? $request->name_en : ' ',
+                        'branch_id' => $request->branch_id,
+                        'category_id' => $request->category_id,
+                        'karat_id' => $request->karat_id ?? 0,
+                        'weight' => $request->weight ?? 0,
+                        'no_metal' => $request->no_metal ?? 0,
+                        'no_metal_type' => $request->no_metal_type ?? 0,
+                        'made_Value' => $request->made_Value ?? 0,
+                        'item_type' => $request->item_type ?? 1,
+                        'tax' => $tax ?? 0,
+                        'state' => $request->state ?? -1,
+                        'img' => $imageName ?? ' ',
+                        'price' => $request->price ?? 0,
+                        'cost' => $request->cost ?? 0,
+                        'multi' => $request->multi ?? 0,
+                        'supplier_id' =>$request->supplier_id ?? 0,
+                        'supplier_bill_number' =>$request->supplier_bill_number ?? 0,
+                        'user_id' => Auth::user() -> id
+                    ]); 
+                } catch (QueryException $ex) {
+                    // Ignore mysql2 sync failures to avoid blocking primary insert.
+                }
 
                 if ($request->item_type == 2) {
                     $warehouses = Storehouse::all();
@@ -354,24 +357,28 @@ class ItemController extends Controller
                 
                 $item2 = Item2::find($request->id);
                 if ($item2) {
-                    $item2->update([
-                        'code' => $request->code,
-                        'name_ar' => $request->name_ar,
-                        'name_en' => $request->name_en != null ? $request->name_en : ' ',
-                        'category_id' => $request->category_id,
-                        'karat_id' => $karat_id,
-                        'weight' => $request->weight,
-                        'no_metal' => $request->no_metal,
-                        'no_metal_type' => $request->no_metal_type,
-                        'made_Value' => $request->made_Value ?? 0,
-                        'item_type' => $request->item_type ?? 1,
-                        'tax' => $request->tax ?? 0,
-                        'state' => $request->state ?? 1,
-                        'multi' => $request->multi ?? 0,
-                        'img' => $imageName,
-                        'branch_id' => $request->branch_id,
-                        'user_id' => Auth::user() -> id
-                    ]); 
+                    try {
+                        $item2->update([
+                            'code' => $request->code,
+                            'name_ar' => $request->name_ar,
+                            'name_en' => $request->name_en != null ? $request->name_en : ' ',
+                            'category_id' => $request->category_id,
+                            'karat_id' => $karat_id,
+                            'weight' => $request->weight,
+                            'no_metal' => $request->no_metal,
+                            'no_metal_type' => $request->no_metal_type,
+                            'made_Value' => $request->made_Value ?? 0,
+                            'item_type' => $request->item_type ?? 1,
+                            'tax' => $request->tax ?? 0,
+                            'state' => $request->state ?? 1,
+                            'multi' => $request->multi ?? 0,
+                            'img' => $imageName,
+                            'branch_id' => $request->branch_id,
+                            'user_id' => Auth::user() -> id
+                        ]); 
+                    } catch (QueryException $ex) {
+                        // Ignore mysql2 sync failures to avoid blocking primary update.
+                    }
                 }
               
               
