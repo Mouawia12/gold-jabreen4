@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Branch;
 use App\Models\Pricing;
+use App\Models\TaxSettings;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -60,6 +61,14 @@ class DatabaseSeeder extends Seeder
                 ]
             );
         }
+
+        TaxSettings::firstOrCreate(
+            [],
+            [
+                'enabled' => 0,
+                'value' => 0.00,
+            ]
+        );
 
         $this->seedPermissions();
         $this->grantAdminAllPermissions();
