@@ -352,6 +352,12 @@
 
     });
 
+    @if ($errors->any())
+    $(document).ready(function(){
+        $('#createModal').modal("show");
+    });
+    @endif
+
     function confirmDelete(){
         let url = "{{ route('deleteCompany', ':id') }}";
         url = url.replace(':id', id);

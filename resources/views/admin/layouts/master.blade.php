@@ -165,6 +165,23 @@
 @include('admin.layouts.main-header')
 <!-- container -->
     <div class="container-fluid">
+        @if (session('error'))
+            <div class="alert alert-danger fade show m-3">
+                <button class="close" data-dismiss="alert" aria-label="Close">×</button>
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="alert alert-danger fade show m-3">
+                <button class="close" data-dismiss="alert" aria-label="Close">×</button>
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         @yield('page-header')
         @yield('content')
     </div>

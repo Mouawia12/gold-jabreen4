@@ -155,6 +155,9 @@ class CompanyController extends Controller
                         }
 
                     }
+                } else {
+                    return redirect()->route('clients', $request->type)
+                        ->with('error', 'العميل/المورد موجود مسبقًا');
                 }
                 
                 if(isset($request -> postax)){ 
@@ -219,14 +222,14 @@ class CompanyController extends Controller
                     'customer_group_name' => '',
                     'name' => $request->company,
                     'company' => $request->company,
-                    'vat_no' => $request->vat_no ,
-                    'address' => $request-> address ? $company-> address: '',
+                    'vat_no' => $request->vat_no ?: $company->vat_no,
+                    'address' => $request->address ?: $company->address,
                     'city' => '' ,
                     'state' => '',
                     'postal_code' => '',
                     'country' => '',
-                    'email' => $request -> email ? $request -> email : '',
-                    'phone' => $request -> phone ? $request -> phone : '',
+                    'email' => $request->email ?: $company->email,
+                    'phone' => $request->phone ?: $company->phone,
                     'invoice_footer' => '',
                     'logo' => '',
                     'account_id' => $request ->account_id,
