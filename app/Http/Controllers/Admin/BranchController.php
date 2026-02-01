@@ -142,7 +142,14 @@ class BranchController extends Controller
         try {
             $account_setting = $this->getTableColumns('account_settings');
             $setting = AccountSetting::latest('id')-> first();
-            $setting_const = AccountSetting::select('warehouse_id','sales_tax_account','purchase_tax_account','profit_account','reverse_profit_account','supplier_default_account')-> first();
+            $setting_const = AccountSetting::select(
+                'warehouse_id',
+                'sales_tax_account',
+                'purchase_tax_account',
+                'profit_account',
+                'reverse_profit_account',
+                'supplier_default_account'
+            )->first();
           
             $account_setting_branch = AccountSetting::create([ 
                 'safe_account' => 0,
@@ -163,12 +170,12 @@ class BranchController extends Controller
                 'purchase_discount_account' => 0,  
                 'made_account' => 0,
                 'cost_account' => 0, 
-                'reverse_profit_account' => $setting_const->reverse_profit_account,
-                'supplier_default_account' => $setting_const->supplier_default_account,
-                'profit_account' => $setting_const->profit_account,
-                'purchase_tax_account' => $setting_const->purchase_tax_account,
-                'sales_tax_account' => $setting_const->sales_tax_account,
-                'warehouse_id' => $setting_const->warehouse_id,
+                'reverse_profit_account' => $setting_const->reverse_profit_account ?? 0,
+                'supplier_default_account' => $setting_const->supplier_default_account ?? 0,
+                'profit_account' => $setting_const->profit_account ?? 0,
+                'purchase_tax_account' => $setting_const->purchase_tax_account ?? 0,
+                'sales_tax_account' => $setting_const->sales_tax_account ?? 0,
+                'warehouse_id' => $setting_const->warehouse_id ?? 0,
                 'branch_id' => $branche_id,
             ]);
     

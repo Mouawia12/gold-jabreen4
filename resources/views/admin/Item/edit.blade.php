@@ -114,6 +114,9 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <a href="{{ route('karats.simple') }}" target="_blank" class="d-inline-block mt-1">
+                                    + إضافة عيار
+                                </a>
                             </div>
                         </div>                
                         <div class="col-md-3">

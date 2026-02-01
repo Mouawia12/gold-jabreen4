@@ -8,6 +8,7 @@ use App\Models\Pricing;
 use App\Models\TaxSettings;
 use App\Models\User;
 use App\Models\ProgramSetting;
+use App\Models\AccountSetting;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -78,6 +79,38 @@ class DatabaseSeeder extends Seeder
                 'users' => 0,
                 'items' => 1,
                 'status' => 1,
+            ]
+        );
+
+        AccountSetting::updateOrCreate(
+            ['id' => 1],
+            [
+                'safe_account' => 0,
+                'bank_account' => 0,
+                'sales_account' => 0,
+                'purchase_account' => 0,
+                'purchase_Jewelry_account' => 0,
+                'purchase_old_account' => 0,
+                'purchase_pure_account' => 0,
+                'return_sales_account' => 0,
+                'return_purchase_account' => 0,
+                'stock_account' => 0,
+                'stock_Jewelry_account' => 0,
+                'stock_old_account' => 0,
+                'stock_pure_account' => 0,
+                'stock_under_account' => 0,
+                'sales_discount_account' => 0,
+                'purchase_discount_account' => 0,
+                'made_account' => 0,
+                'cost_account' => 0,
+                'reverse_profit_account' => 0,
+                'supplier_default_account' => 0,
+                'profit_account' => 0,
+                'purchase_tax_account' => 0,
+                'sales_tax_account' => 0,
+                'sales_tax_excise_account' => 0,
+                'warehouse_id' => 0,
+                'branch_id' => 1,
             ]
         );
 

@@ -253,6 +253,7 @@ Route::group(
     Route::get('/getCategory/{id}', [CategoryController::class, 'show'])->name('getCategory');
 
     Route::get('/karats', [KaratController::class, 'index'])->name('karats');
+    Route::get('/karats/simple', [KaratController::class, 'simple'])->name('karats.simple');
     Route::post('/storeKarat', [KaratController::class, 'store'])->name('storeKarat');
     Route::get('/deleteKarat/{id}', [KaratController::class, 'destroy'])->name('deleteKarat');
     Route::get('/getKarat/{id}', [KaratController::class, 'show'])->name('getKarat');

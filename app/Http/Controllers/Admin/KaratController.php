@@ -43,6 +43,11 @@ class KaratController extends Controller
         //
     }
 
+    public function simple()
+    {
+        return view('admin.Karat.simple');
+    }
+
     /**
      * Store a newly created resource in storage.
      *

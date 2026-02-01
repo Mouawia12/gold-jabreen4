@@ -228,6 +228,13 @@
                             {{__('main.lost_barcode')}}
                             </a>
                         </li>  
+                        @can('اضافة الاعدادات')
+                        <li>
+                            <a class="slide-item" href="{{route('karats.simple')}}">
+                            إضافة عيار
+                            </a>
+                        </li>
+                        @endcan
                     </ul>
                 </li> 
             @endcan  
