@@ -2,8 +2,13 @@ $(document).ready(function(){
 
   var stickyElement = $(".sticky"),
       stickyClass = "sticky-pin",
-      stickyPos = stickyElement.offset().top, //Distance from the top of the window.
       stickyHeight;
+
+  if (!stickyElement.length) {
+    return;
+  }
+
+  var stickyPos = stickyElement.offset().top; //Distance from the top of the window.
 
   
 

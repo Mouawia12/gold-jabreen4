@@ -8,6 +8,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+
         $currentSqlMode = DB::selectOne('SELECT @@SESSION.sql_mode AS sql_mode');
         DB::statement("SET SESSION sql_mode='NO_ENGINE_SUBSTITUTION'");
 
@@ -807,6 +811,10 @@ SQL
 
     public function down(): void
     {
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+
         Schema::dropIfExists('warehouses_items');
         Schema::dropIfExists('views');
         Schema::dropIfExists('user_roles');

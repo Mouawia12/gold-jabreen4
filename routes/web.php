@@ -70,6 +70,11 @@ Route::group(
 
 // Public Routes
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('index');
+Route::get('/login', function () {
+    return Auth::guard('admin-web')->check()
+        ? redirect()->route('admin.home')
+        : redirect()->route('admin.login');
+})->name('login');
 Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 

@@ -128,13 +128,13 @@ class PosInvoiceCreateTest extends TestCase
             'item_tax' => [0],
             'net_money' => [100],
             'total_weight21' => 1.00,
-            'paid' => 0,
+            'paid' => 100,
             'discount' => 0,
             'tax' => 0,
             'bill_client_phone' => '',
             'bill_client_name' => '',
             'notes' => '',
-            'cash' => 0,
+            'cash' => 100,
             'visa' => 0,
         ];
 
@@ -142,6 +142,9 @@ class PosInvoiceCreateTest extends TestCase
             ->post('/admin/store_pos', $payload);
 
         $response->assertStatus(302);
+        $billId = DB::table('exit_works')->value('id');
+        $this->assertNotNull($billId);
+        $response->assertRedirect('/admin/sales/simplified-tax/' . $billId . '/print');
         $this->assertDatabaseCount('exit_works', 1);
         $this->assertDatabaseCount('exit_work_details', 1);
     }

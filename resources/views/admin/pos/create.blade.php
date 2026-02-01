@@ -7,6 +7,22 @@
 
 @section('content')
 @can('اضافة فاتورة ضريبية')  
+    @if (session('error'))
+        <div class="alert alert-danger fade show">
+            <button class="close" data-dismiss="alert" aria-label="Close">×</button>
+            {{ session('error') }}
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger fade show">
+            <button class="close" data-dismiss="alert" aria-label="Close">×</button>
+            <ul class="m-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     @if (session('success'))
         <div class="alert alert-success  fade show">
             <button class="close" data-dismiss="alert" aria-label="Close">×</button>
@@ -502,36 +518,44 @@
 
         $('#add_item').focus();
         $(document).on('click', '#payment_btn', function (){
-            console.log($('#home-tab').classList);
-            console.log($('#profile-tab').classList);
-            const money = document.getElementById('money').value;
-            const cash = document.getElementById('cash').value;
-            const visa = document.getElementById('visa').value;
+            const money = Number(document.getElementById('money').value || 0);
+            const cash = Number(document.getElementById('cash').value || 0);
+            const visa = Number(document.getElementById('visa').value || 0);
             const type = document.getElementById('type').value;
+            const totalPaid = Number((cash + visa).toFixed(2));
+            const totalMoney = Number(money.toFixed(2));
 
-            if(Number(money) == (Number(cash) + Number(visa))){
+            if (Math.abs(totalMoney - totalPaid) < 0.01) {
                 if(type == '1'){
                     let form = document.getElementById('pos_sales_form');
                     if (form) {
                         if (!form.checkValidity()) {
                           form.classList.add('was-validated'); 
+                          if (form.reportValidity) {
+                              form.reportValidity();
+                          }
                         }else{
-                        
-                            // Hide the modal first
-                            $('#paymentsModal').modal('hide');
-                        
-                            // Wait for the modal to fully close before showing the alert
-                            $('#paymentsModal').on('hidden.bs.modal', function () {
+                            const paidInput = document.getElementById('paid');
+                            if (paidInput) {
+                                paidInput.value = totalPaid.toFixed(2);
+                            }
+
+                            const submitForm = () => form.submit();
+                            if (typeof Swal !== 'undefined' && Swal.fire) {
                                 Swal.fire({
                                     position: 'center',
                                     icon: 'success',
                                     title: 'جاري حفظ البيانات',
                                     showConfirmButton: false,
-                                    timer: 3000
-                                }).then(() => {
-                                    form.submit(); // Submit after alert closes
-                                });
-                            });
+                                    timer: 1500
+                                }).then(() => submitForm());
+                            } else {
+                                submitForm();
+                            }
+
+                            if ($('#paymentsModal').length) {
+                                $('#paymentsModal').modal('hide');
+                            }
                         }
                     }     
                 } 
@@ -1571,10 +1595,10 @@
             tr_html += '<td><input type="number" step="any" min="1"class="form-control iNewPrice" name="gram_price[]" value="' + item.price.toFixed(2) + '" required></td>';
             tr_html += '<td><input type="text" readonly="readonly" class="form-control iNewTotal" name="ItemTotalVal[]" value="' + (item.weight * item.price).toFixed(2) +  '"    ></td>';
             tr_html += '<td><input type="text" readonly="readonly" class="form-control iNewTax" name="item_tax[]" value="' + (item.weight * item.price  * (item.karat.stamp_value  / 100) ).toFixed(2)  +  '" ></td>';
-            tr_html += '<td><input type="number" step="any" min="1" class="form-control iNewTotalWithTax" name="net_money[]" value=" ' +  ((item.weight * item.price) +  (item.weight * item.price  * (item.karat.stamp_value / 100) )).toFixed(2)  +' " required></td>';
-            tr_html += '<td hidden><input type="text" class="form-control" name="newWeight21[]" value=" ' + item.weight *  item.karat.transform_factor   +   '  " ></td>';
-            tr_html += '<td hidden><input type="text" class="form-control" name="newKaratTransferFactor[]" value=" ' + item.karat.transform_factor   +   '  " ></td>';
-            tr_html += '<td hidden><input type="text" class="form-control" name="stamp[]" value=" ' + item.karat.stamp_value   +   '  " ></td>';
+            tr_html += '<td><input type="number" step="any" min="0" class="form-control iNewTotalWithTax" name="net_money[]" value="' +  ((item.weight * item.price) +  (item.weight * item.price  * (item.karat.stamp_value / 100) )).toFixed(2)  + '" required></td>';
+            tr_html += '<td hidden><input type="text" class="form-control" name="newWeight21[]" value="' + (item.weight * item.karat.transform_factor) + '" ></td>';
+            tr_html += '<td hidden><input type="text" class="form-control" name="newKaratTransferFactor[]" value="' + item.karat.transform_factor + '" ></td>';
+            tr_html += '<td hidden><input type="text" class="form-control" name="stamp[]" value="' + item.karat.stamp_value + '" ></td>';
             tr_html += '<td><input type="hidden" class="form-control iNewkarat" name="karat_id[]" value="' + item.karat_id + '"></td>';
             tr_html += `<td>
                             <button type="button" class="btn btn-danger deleteBtn " value=" '+item.id+' ">
@@ -1686,5 +1710,3 @@
 </script> 
 @endsection 
  
-
-

@@ -488,7 +488,8 @@ class PosController extends WarehouseController
                 //$simplified_invoice = new ZataControlle();
                 //$simplified_invoice->simplified_tax_invoice($id);
     
-                return redirect()->route('workExitPreview' , $id)->with('success' ,  __('main.created'));
+                return redirect()->route('admin.sales.simplified_tax.print', $id)
+                    ->with('success' ,  __('main.created'));
             
             } else {
                 return redirect()->route('pos')->with('error' ,  __('main.nodetails'));

@@ -60,7 +60,7 @@ class LoginController extends Controller
 
     public function showLoginForm() {
         if (Auth::guard('admin-web')->check()) {
-            return view('admin.home');
+            return redirect()->route('admin.home');
         }else{
             return view('admin.auth.login');
         }

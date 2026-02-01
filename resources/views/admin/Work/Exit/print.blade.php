@@ -104,23 +104,28 @@
         </h4>
         <div class="clearfix"></div>
         <div class="visible-print text-center mt-1">
-            <?php
-            use Salla\ZATCA\GenerateQrCode;
-            use Salla\ZATCA\Tags\InvoiceDate;
-            use Salla\ZATCA\Tags\InvoiceTaxAmount;
-            use Salla\ZATCA\Tags\InvoiceTotalAmount;
-            use Salla\ZATCA\Tags\Seller;
-            use Salla\ZATCA\Tags\TaxNumber;
-            $displayQRCodeAsBase64 = GenerateQrCode::fromArray([
-                new Seller($company -> name_ar), // seller name
-                new TaxNumber($company -> taxNumber), // seller tax number
-                new InvoiceDate($bill -> date), // invoice date as Zulu ISO8601 @see https://en.wikipedia.org/wiki/ISO_8601
-                new InvoiceTotalAmount($bill -> net_money), // invoice total amount
-                new InvoiceTaxAmount($bill -> tax) // invoice tax amount
-                // TODO :: Support others tags
-            ])->render();
-            ?>
-            <img src="{{$displayQRCodeAsBase64}}" style="width: 150px; height: 150px;" alt="QR Code"/>
+            @php
+                $companyName = $company?->name_ar ?? $company?->name_en ?? '';
+                $companyTax = $company?->taxNumber ?? '';
+                $displayQRCodeAsBase64 = null;
+                if (!empty($companyName) || !empty($companyTax)) {
+                    $displayQRCodeAsBase64 = \Salla\ZATCA\GenerateQrCode::fromArray([
+                        new \Salla\ZATCA\Tags\Seller($companyName), // seller name
+                        new \Salla\ZATCA\Tags\TaxNumber($companyTax), // seller tax number
+                        new \Salla\ZATCA\Tags\InvoiceDate($bill->date), // invoice date as Zulu ISO8601
+                        new \Salla\ZATCA\Tags\InvoiceTotalAmount($bill->net_money), // invoice total amount
+                        new \Salla\ZATCA\Tags\InvoiceTaxAmount($bill->tax) // invoice tax amount
+                        // TODO :: Support others tags
+                    ])->render();
+                }
+            @endphp
+            @if ($displayQRCodeAsBase64)
+                <img src="{{$displayQRCodeAsBase64}}" style="width: 150px; height: 150px;" alt="QR Code"/>
+            @else
+                <div class="alert alert-warning m-0">
+                    بيانات الشركة غير مكتملة (اسم الشركة/الرقم الضريبي).
+                </div>
+            @endif
         </div>
  
         <h6 class="text-center mt-1" style="font-weight: bold;">

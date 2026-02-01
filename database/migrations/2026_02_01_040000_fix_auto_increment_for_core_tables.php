@@ -8,6 +8,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+
         $tables = [
             'items',
             'karats',
@@ -38,6 +42,10 @@ return new class extends Migration
 
     private function ensureAutoIncrementId(string $table): void
     {
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+
         if (!Schema::hasTable($table) || !Schema::hasColumn($table, 'id')) {
             return;
         }
