@@ -16,6 +16,8 @@ return new class extends Migration
             'exit_work_details',
             'exit_olds',
             'exit_old_details',
+            'enter_money',
+            'exit_money',
             'enter_works',
             'enter_work_details',
             'enter_olds',

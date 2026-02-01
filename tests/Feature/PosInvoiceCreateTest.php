@@ -40,21 +40,20 @@ class PosInvoiceCreateTest extends TestCase
             'updated_at' => now(),
         ]);
 
-        $karatId = 1;
-        DB::table('karats')->insert([
-            'id' => $karatId,
-            'name_ar' => 'عيار 21',
-            'name_en' => 'K21',
-            'label' => '21',
-            'stamp_value' => 21,
-            'transform_factor' => 1.0,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $karatId = DB::table('karats')->where('label', 'K21')->value('id');
+        if (!$karatId) {
+            $karatId = DB::table('karats')->insertGetId([
+                'name_ar' => 'عيار 21',
+                'name_en' => 'K21',
+                'label' => 'K21',
+                'stamp_value' => 21,
+                'transform_factor' => 1.0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
 
-        $itemId = 1;
-        DB::table('items')->insert([
-            'id' => $itemId,
+        $itemId = DB::table('items')->insertGetId([
             'code' => 'ITM-1',
             'name_ar' => 'صنف 1',
             'name_en' => 'Item 1',
