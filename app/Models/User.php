@@ -13,6 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable implements JWTSubject
 {
     use HasRoles, HasApiTokens, HasFactory, Notifiable;
+    protected $guard_name = 'admin-web';
     protected $table = 'users';
     /**
      * The attributes that are mass assignable.

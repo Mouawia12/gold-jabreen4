@@ -113,7 +113,7 @@ class DatabaseSeeder extends Seeder
             }
             $rows[] = [
                 'name' => $fields[1],
-                'guard_name' => 'web',
+                'guard_name' => 'admin-web',
                 'created_at' => $fields[4],
                 'updated_at' => $fields[5],
             ];
@@ -128,7 +128,7 @@ class DatabaseSeeder extends Seeder
     {
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        $guard = 'web';
+        $guard = 'admin-web';
 
         $role = Role::firstOrCreate([
             'name' => 'Admin',
