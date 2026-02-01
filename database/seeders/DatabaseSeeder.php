@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Branch;
+use App\Models\Pricing;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -37,5 +38,22 @@ class DatabaseSeeder extends Seeder
                 'status' => 1,
             ]
         );
+
+        $user = User::where('email', 'info@admin.com')->first();
+        if ($user) {
+            Pricing::firstOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'last_Update' => now(),
+                    'price' => 0.00,
+                    'price_21' => 0.00,
+                    'price_22' => 0.00,
+                    'price_24' => 0.00,
+                    'price_18' => 0.00,
+                    'price_14' => 0.00,
+                    'currency' => 'SAR',
+                ]
+            );
+        }
     }
 }
