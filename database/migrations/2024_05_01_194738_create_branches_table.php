@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('branch_name');
             $table->string('branch_phone')->nullable();
             $table->string('branch_address')->nullable();
+            $table->string('commercial_record')->nullable();
+            $table->string('license_number')->nullable();
             $table->boolean('status');
             $table->timestamps();
         });
