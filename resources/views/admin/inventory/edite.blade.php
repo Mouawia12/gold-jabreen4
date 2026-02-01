@@ -247,7 +247,7 @@ select option {
             </div>
             <!-- /.container-fluid -->
             <input id="local" value="{{Config::get('app.locale')}}" hidden>
-            <input id="taxPer" value="{{$setting -> enabled == 1 ? $setting -> value : 0}}" hidden>
+            <input id="taxPer" value="{{($setting && $setting->enabled == 1) ? $setting->value : 0}}" hidden>
 
             <audio id="mysoundclip1" preload="auto">
                 <source src="{{URL::asset('assets/sound/beep/beep-timber.mp3')}}"></source>

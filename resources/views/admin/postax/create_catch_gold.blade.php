@@ -443,7 +443,7 @@
             </div>
             <!-- /.container-fluid -->
             <input id="local" value="{{Config::get('app.locale')}}" hidden>
-            <input id="taxPer" value="{{$setting -> enabled == 1 ? $setting -> value : 0}}" hidden>
+            <input id="taxPer" value="{{($setting && $setting->enabled == 1) ? $setting->value : 0}}" hidden>
         </div>
         <!-- End of Main Content --> 
     </div>
