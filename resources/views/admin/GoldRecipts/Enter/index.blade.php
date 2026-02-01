@@ -165,7 +165,7 @@
                                 <label class="d-block">
                                     الفرع <span style="color:red; font-size:20px; font-weight:bold;">*</span>
                                 </label>
-                                @if(empty(Auth::user()->branch_id))
+                                @if(empty(Auth::user()->branch_id) || Auth::user()->hasRole('Admin'))
                                     <select required  class="form-control select2" name="branch_id" id="branch_id">
                                         <option value="">حدد الاختيار</option>
                                         @foreach($branches as $branch)

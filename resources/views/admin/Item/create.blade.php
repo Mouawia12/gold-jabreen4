@@ -43,7 +43,7 @@
                                      الفرع
                                 </label>
                                 <option value="0">بدون</option>
-                                @if(empty(Auth::user()->branch_id))
+                                @if(empty(Auth::user()->branch_id) || Auth::user()->hasRole('Admin'))
                                     <select   class="js-example-basic-single w-100" name="branch_id" id="branch_id"> 
                                         @foreach($branches as $branch)
                                             <option value="{{$branch->id}}">{{$branch->branch_name}}</option>
@@ -305,7 +305,7 @@ $(document).ready(function () {
         }
     });
 
-    @if(empty(Auth::user()->branch_id))
+    @if(empty(Auth::user()->branch_id) || Auth::user()->hasRole('Admin'))
         $("#branch_id").val(1).trigger("change");  
     @endif
 });

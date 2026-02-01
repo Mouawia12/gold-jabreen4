@@ -81,7 +81,7 @@
                             <label class="form-label"> الفرع </label>
                             <select data-live-search="true" data-style="btn-dark" title="اختر الفرع"
                                     class="form-control selectpicker" name="branch_id" id="branch_id">
-                                    @if(empty(Auth::user()->branch_id))
+                                    @if(empty(Auth::user()->branch_id) || Auth::user()->hasRole('Admin'))
                                         <option value="">كل الفروع</option>
                                     @endif
                                 @foreach($branches as $branch)

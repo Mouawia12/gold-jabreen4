@@ -30,7 +30,7 @@
                                     <div class="col-6">
                                         <div class="form-group"> 
                                             <label>{{ __('الفرع') }} <span style="color:red; font-size:20px; font-weight:bold;">*</span> </label>
-                                            @if(empty(Auth::user()->branch_id))
+                                            @if(empty(Auth::user()->branch_id) || Auth::user()->hasRole('Admin'))
                                                 <select required  class="js-example-basic-single w-100" name="branch_id" id="branch_id">
                                                     <option value="0">جميع الفروع</option>
                                                     @foreach($branches as $branch)

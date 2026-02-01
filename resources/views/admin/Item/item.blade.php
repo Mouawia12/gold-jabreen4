@@ -101,7 +101,7 @@
                                 <label class="d-block">
                                      الفرع
                                 </label>
-                                @if(empty(Auth::user()->branch_id))
+                                @if(empty(Auth::user()->branch_id) || Auth::user()->hasRole('Admin'))
                                     <select   class="js-example-basic-single w-100" name="branch_id" id="branch_id">
                                         <option value=""></option>
                                         @foreach($branches as $branch)
@@ -562,7 +562,7 @@
                             $(".modal-body #supplier_id").val(0).trigger("change"); 
                             $(".modal-body #supplier_bill_number").val(0);  
                             document.getElementById('item-name').innerHTML=' اضافة';
-                            @if(empty(Auth::user()->branch_id))
+                            @if(empty(Auth::user()->branch_id) || Auth::user()->hasRole('Admin'))
                                 $(".modal-body #branch_id").val(1).trigger("change");  
                             @endif
                             $(".modal-body #id").val(0);

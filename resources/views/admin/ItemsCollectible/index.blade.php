@@ -169,7 +169,7 @@
                                 <label class="d-block">
                                      الفرع <span style="color:red; font-size:20px; font-weight:bold;">*</span>
                                 </label>
-                                @if(empty(Auth::user()->branch_id))
+                                @if(empty(Auth::user()->branch_id) || Auth::user()->hasRole('Admin'))
                                     <select required  class="js-example-basic-single w-100" name="branch_id" id="branch_id">
                                         <option value=""></option>
                                         @foreach($branches as $branch)
@@ -549,7 +549,7 @@
                             $(".modal-body #state").val(1);
                             $(".modal-body #id").val(0);
 
-                            @if(empty(Auth::user()->branch_id))
+                            @if(empty(Auth::user()->branch_id) || Auth::user()->hasRole('Admin'))
                                 $(".modal-body #branch_id").val(0).trigger("change");  
                             @endif
 

@@ -43,7 +43,7 @@
                                      الفرع
                                 </label>
                                 
-                                @if(empty(Auth::user()->branch_id))
+                                @if(empty(Auth::user()->branch_id) || Auth::user()->hasRole('Admin'))
 
                                     <select class="js-example-basic-single w-100" name="branch_id" id="branch_id">
                                         
