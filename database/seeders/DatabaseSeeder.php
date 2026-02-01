@@ -62,8 +62,8 @@ class DatabaseSeeder extends Seeder
             );
         }
 
-        TaxSettings::firstOrCreate(
-            [],
+        TaxSettings::updateOrCreate(
+            ['id' => 1],
             [
                 'enabled' => 0,
                 'value' => 0.00,
