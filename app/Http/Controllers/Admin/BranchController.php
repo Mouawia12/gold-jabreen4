@@ -49,7 +49,7 @@ class BranchController extends Controller
         if(!empty(Auth::user() ->branch_id)){
             $program_settings = ProgramSetting::first();
             $branchs = Branch::all();
-            if($program_settings->branche == $branchs ->count()){
+            if($program_settings && $program_settings->branche == $branchs->count()){
                 return ;
             }
         }

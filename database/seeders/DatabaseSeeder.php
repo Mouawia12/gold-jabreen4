@@ -7,6 +7,7 @@ use App\Models\Branch;
 use App\Models\Pricing;
 use App\Models\TaxSettings;
 use App\Models\User;
+use App\Models\ProgramSetting;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -67,6 +68,16 @@ class DatabaseSeeder extends Seeder
             [
                 'enabled' => 0,
                 'value' => 0.00,
+            ]
+        );
+
+        ProgramSetting::updateOrCreate(
+            ['id' => 1],
+            [
+                'branche' => 0,
+                'users' => 0,
+                'items' => 1,
+                'status' => 1,
             ]
         );
 
