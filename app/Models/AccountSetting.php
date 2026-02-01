@@ -25,6 +25,7 @@ class AccountSetting extends Model
         'stock_under_account',
         'sales_discount_account', 
         'sales_tax_account', 
+        'sales_tax_excise_account',
         'purchase_discount_account', 
         'purchase_tax_account', 
         'cost_account', 
@@ -33,6 +34,8 @@ class AccountSetting extends Model
         'bank_account', 
         'made_account', 
         'supplier_default_account', 
-        'branch_id'
+        'branch_id',
+        'purchase_jewelry_account',
+        'stock_jewelry_account'
     ];
 }

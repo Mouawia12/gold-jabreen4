@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
+use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Category2;
 use App\Models\Pricing;
@@ -65,23 +66,48 @@ class CategoryController extends Controller
                 'name_en' => 'required|unique:categories',
             ]);
             try {
+                $resolvedName = $request->name_ar ?: $request->name_en;
+                $branchId = Auth::user()->branch_id ?? Branch::query()->value('id') ?? 1;
                 Category::create([
+                    'name' => $resolvedName,
                     'name_ar' => $request -> name_ar,
                     'name_en' => $request -> name_en,
                     'description' => $request -> description ?? '' ,
                     'image_url' => $imageName,
                     'parent_id' => 0,
+                    'branch_id' => $branchId,
+                    'status' => 1,
                     'user_id' => Auth::user() -> id
                 ]);
 
-                Category2::create([
+                $category2Data = [
+                    'name_ar' => $request -> name_ar,
+                    'name_en' => $request -> name_en,
+                    'description' => $request -> description ?? '' ,
+                    'image_url' => $imageName,
+                    'parent_id' => 0,
+                    'user_id' => Auth::user() -> id,
+                    'name' => $resolvedName,
+                    'branch_id' => $branchId,
+                    'status' => 1
+                ];
+                $fallbackCategory2Data = [
                     'name_ar' => $request -> name_ar,
                     'name_en' => $request -> name_en,
                     'description' => $request -> description ?? '' ,
                     'image_url' => $imageName,
                     'parent_id' => 0,
                     'user_id' => Auth::user() -> id
-                ]);
+                ];
+                try {
+                    Category2::create($category2Data);
+                } catch (QueryException $ex) {
+                    try {
+                        Category2::create($fallbackCategory2Data);
+                    } catch (QueryException $fallbackEx) {
+                        // Ignore mysql2 sync failures to avoid blocking the main database.
+                    }
+                }
  
                 return redirect()->route('categories')->with('success' , __('main.created'));
             } catch(QueryException $ex){
@@ -144,23 +170,60 @@ class CategoryController extends Controller
             ]);
 
             try {
+                $resolvedName = $request->name_ar ?: $request->name_en;
+                $branchId = $category->branch_id ?? Auth::user()->branch_id ?? Branch::query()->value('id') ?? 1;
                 $category -> update([
+                    'name' => $resolvedName,
                     'name_ar' => $request -> name_ar,
                     'name_en' => $request -> name_en,
                     'description' => $request -> description ?? '' ,
                     'image_url' => $imageName,
                     'parent_id' => 0,
+                    'branch_id' => $branchId,
+                    'status' => $category->status ?? 1,
                     'user_id' => Auth::user() -> id
                 ]);
 
-                $category2 -> update([
+                $category2Data = [
+                    'name_ar' => $request -> name_ar,
+                    'name_en' => $request -> name_en,
+                    'description' => $request -> description ?? '' ,
+                    'image_url' => $imageName,
+                    'parent_id' => 0,
+                    'user_id' => Auth::user() -> id,
+                    'name' => $resolvedName,
+                    'branch_id' => $branchId,
+                    'status' => $category2->status ?? 1
+                ];
+                $fallbackCategory2Data = [
                     'name_ar' => $request -> name_ar,
                     'name_en' => $request -> name_en,
                     'description' => $request -> description ?? '' ,
                     'image_url' => $imageName,
                     'parent_id' => 0,
                     'user_id' => Auth::user() -> id
-                ]);
+                ];
+                if ($category2) {
+                    try {
+                        $category2->update($category2Data);
+                    } catch (QueryException $ex) {
+                        try {
+                            $category2->update($fallbackCategory2Data);
+                        } catch (QueryException $fallbackEx) {
+                            // Ignore mysql2 sync failures to avoid blocking the main database.
+                        }
+                    }
+                } else {
+                    try {
+                        Category2::create($category2Data);
+                    } catch (QueryException $ex) {
+                        try {
+                            Category2::create($fallbackCategory2Data);
+                        } catch (QueryException $fallbackEx) {
+                            // Ignore mysql2 sync failures to avoid blocking the main database.
+                        }
+                    }
+                }
                 return redirect()->route('categories')->with('success' , __('main.updated'));
             } catch (QueryException $ex){
                 return redirect()->route('categories')->with('error' ,  $ex->getMessage());

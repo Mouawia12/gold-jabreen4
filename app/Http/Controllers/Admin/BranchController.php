@@ -146,12 +146,14 @@ class BranchController extends Controller
                 'warehouse_id',
                 'sales_tax_account',
                 'purchase_tax_account',
+                'sales_tax_excise_account',
                 'profit_account',
                 'reverse_profit_account',
                 'supplier_default_account'
             )->first();
-          
-            $account_setting_branch = AccountSetting::create([ 
+
+            $accountSettingColumns = array_flip($account_setting);
+            $accountSettingData = [ 
                 'safe_account' => 0,
                 'bank_account' => 0,
                 'sales_account' => 0,
@@ -175,9 +177,21 @@ class BranchController extends Controller
                 'profit_account' => $setting_const->profit_account ?? 0,
                 'purchase_tax_account' => $setting_const->purchase_tax_account ?? 0,
                 'sales_tax_account' => $setting_const->sales_tax_account ?? 0,
+                'sales_tax_excise_account' => $setting_const->sales_tax_excise_account ?? 0,
                 'warehouse_id' => $setting_const->warehouse_id ?? 0,
                 'branch_id' => $branche_id,
-            ]);
+            ];
+            if (!isset($accountSettingColumns['purchase_Jewelry_account']) && isset($accountSettingColumns['purchase_jewelry_account'])) {
+                $accountSettingData['purchase_jewelry_account'] = $accountSettingData['purchase_Jewelry_account'];
+                unset($accountSettingData['purchase_Jewelry_account']);
+            }
+            if (!isset($accountSettingColumns['stock_Jewelry_account']) && isset($accountSettingColumns['stock_jewelry_account'])) {
+                $accountSettingData['stock_jewelry_account'] = $accountSettingData['stock_Jewelry_account'];
+                unset($accountSettingData['stock_Jewelry_account']);
+            }
+
+            $accountSettingData = array_intersect_key($accountSettingData, $accountSettingColumns);
+            $account_setting_branch = AccountSetting::create($accountSettingData);
     
             for($i = 1; $i < count($account_setting)-10; $i++){
                 
@@ -270,7 +284,13 @@ class BranchController extends Controller
     public function getAccountSetting_private($branche_id)
     {
         $setting = AccountSetting::where('branch_id',$branche_id)->first();
+        if (!$setting) {
+            return;
+        }
         $account_tree = AccountsTree::where('parent_code',52)->latest('id')-> first();
+        if (!$account_tree) {
+            return;
+        }
         $account_tree_subs = AccountsTree::where('parent_code','like','%'. $account_tree->code .'%')-> get();
   
         $name = preg_replace('/[0-9]+/', '', $account_tree->name);
