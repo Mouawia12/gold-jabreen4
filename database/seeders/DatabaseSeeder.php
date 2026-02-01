@@ -7,7 +7,12 @@ use App\Models\Branch;
 use App\Models\Pricing;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
@@ -54,6 +59,92 @@ class DatabaseSeeder extends Seeder
                     'currency' => 'SAR',
                 ]
             );
+        }
+
+        $this->seedPermissions();
+        $this->grantAdminAllPermissions();
+    }
+
+    private function seedPermissions(): void
+    {
+        if (!Schema::hasTable('permissions')) {
+            return;
+        }
+
+        if (Permission::query()->count() > 0) {
+            return;
+        }
+
+        $sqlPath = base_path('gold-jabreen2.sql');
+        if (!file_exists($sqlPath)) {
+            return;
+        }
+
+        $sql = file_get_contents($sqlPath);
+        if ($sql === false) {
+            return;
+        }
+
+        if (!preg_match('/INSERT INTO `permissions` .*?;\\s*/s', $sql, $match)) {
+            return;
+        }
+
+        $insertSql = $match[0];
+        if (!preg_match('/VALUES\\s*(.+);/s', $insertSql, $valuesMatch)) {
+            return;
+        }
+
+        $valuesBlob = trim($valuesMatch[1]);
+        $valuesBlob = trim($valuesBlob);
+        if ($valuesBlob === '') {
+            return;
+        }
+
+        preg_match_all('/\\(([^)]+)\\)/s', $valuesBlob, $tuples);
+        if (empty($tuples[1])) {
+            return;
+        }
+
+        $rows = [];
+        foreach ($tuples[1] as $tuple) {
+            $fields = str_getcsv($tuple, ',', "'");
+            if (count($fields) < 6) {
+                continue;
+            }
+            $rows[] = [
+                'name' => $fields[1],
+                'guard_name' => 'web',
+                'created_at' => $fields[4],
+                'updated_at' => $fields[5],
+            ];
+        }
+
+        if (!empty($rows)) {
+            DB::table('permissions')->insert($rows);
+        }
+    }
+
+    private function grantAdminAllPermissions(): void
+    {
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
+
+        $guard = 'web';
+
+        $role = Role::firstOrCreate([
+            'name' => 'Admin',
+            'guard_name' => $guard,
+        ]);
+
+        $permissions = Permission::query()->where('guard_name', $guard)->get();
+        if ($permissions->isNotEmpty()) {
+            $role->syncPermissions($permissions);
+        }
+
+        $user = User::where('email', 'info@admin.com')->first();
+        if ($user) {
+            $user->role_name = 'Admin';
+            $user->save();
+            $user->syncRoles([$role->name]);
         }
     }
 }
