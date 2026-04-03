@@ -61,6 +61,37 @@
         .pos_details { 
             font-family: DejaVu Sans,Tajawal-Regular;  
         }
+        .sales-policy {
+            width: 44%;
+            margin: 18px 0 10px auto;
+            text-align: right;
+            line-height: 1.75;
+            font-size: 11px !important;
+            font-weight: 400 !important;
+        }
+        .sales-policy * {
+            font-weight: 400 !important;
+        }
+        .sales-policy-title {
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            margin-bottom: 4px;
+        }
+        .sales-policy-subtitle {
+            font-size: 11px !important;
+            font-weight: 700 !important;
+            margin-bottom: 4px;
+        }
+        .sales-policy-list {
+            margin: 0;
+            padding-right: 18px;
+        }
+        .sales-policy-list li {
+            margin-bottom: 4px;
+        }
+        .sales-policy-note {
+            margin-top: 6px;
+        }
     </style>
     <style type="text/css" media="print">
         .above-table {
@@ -109,6 +140,37 @@
         }
         div#sales-header {
             display: none;
+        }
+        .sales-policy {
+            width: 44%;
+            margin: 16px 0 10px auto;
+            text-align: right;
+            line-height: 1.75;
+            font-size: 11px !important;
+            font-weight: 400 !important;
+        }
+        .sales-policy * {
+            font-weight: 400 !important;
+        }
+        .sales-policy-title {
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            margin-bottom: 4px;
+        }
+        .sales-policy-subtitle {
+            font-size: 11px !important;
+            font-weight: 700 !important;
+            margin-bottom: 4px;
+        }
+        .sales-policy-list {
+            margin: 0;
+            padding-right: 18px;
+        }
+        .sales-policy-list li {
+            margin-bottom: 4px;
+        }
+        .sales-policy-note {
+            margin-top: 6px;
         }
     </style>
     <style> 
@@ -258,7 +320,8 @@
                 </td>   
             </tr> 
             </tbody>
-        </table> 
+        </table>
+        @include('partials.sales_policy')
         <div class="row" style="direction:rtl">
             <div class="col-6 text-center">
                 <span> اسم البائع</span> <br>

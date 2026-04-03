@@ -75,6 +75,33 @@
         .meta-grid td { vertical-align: middle; }
         .meta-details-table { margin: 6px auto 0; }
         .meta-details-table td { padding: 3px 6px; text-align: center; font-size: 13px; }
+        .sales-policy {
+            width: 42%;
+            margin-left: auto;
+            text-align: right;
+            line-height: 1.7;
+            font-size: 11px;
+        }
+        .sales-policy-title {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        .sales-policy-subtitle {
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        .sales-policy-list {
+            margin: 0;
+            padding-right: 18px;
+        }
+        .sales-policy-list li {
+            margin-bottom: 4px;
+        }
+        .sales-policy-note {
+            margin-top: 6px;
+        }
     </style>
 </head>
 <body>
@@ -258,6 +285,10 @@
         </td>
     </tr>
 </table>
+
+<div class="section-gap"></div>
+
+@include('partials.sales_policy')
 
 <div class="section-gap"></div>
 
